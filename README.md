@@ -54,8 +54,24 @@ Federated Learning allows multiple parties to collaboratively train a machine le
 
 #### Option 1: Conda (Recommended)
 
-**Linux/Mac:**
+**Linux/Mac/Ubuntu/Debian:**
 ```bash
+# Install Miniconda if not already installed
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh
+
+# Create and activate environment
+conda env create -f FedAvg/environment.yml
+conda activate fedavg
+```
+
+**CentOS/RHEL/Fedora:**
+```bash
+# Install Miniconda
+curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh
+
+# Create and activate environment
 conda env create -f FedAvg/environment.yml
 conda activate fedavg
 ```
@@ -73,13 +89,74 @@ conda activate fedavg
 ```
 
 #### Option 2: Pip Installation
+
+**Linux (Ubuntu/Debian):**
 ```bash
+# Install Python and pip if not available
+sudo apt update
+sudo apt install python3 python3-pip
+
+# Install dependencies
+pip3 install torch torchvision numpy wandb
+```
+
+**Linux (CentOS/RHEL/Fedora):**
+```bash
+# Install Python and pip
+sudo yum install python3 python3-pip  # CentOS/RHEL
+# OR
+sudo dnf install python3 python3-pip  # Fedora
+
+# Install dependencies
+pip3 install torch torchvision numpy wandb
+```
+
+**macOS:**
+```bash
+# Using Homebrew
+brew install python3
+pip3 install torch torchvision numpy wandb
+```
+
+**Windows:**
+```powershell
 pip install torch torchvision numpy wandb
 ```
 
 ## 🚀 Quick Start
 
-### Basic Usage
+### Using Provided Scripts (Recommended)
+
+For easy execution, use the provided startup scripts:
+
+**Windows:**
+```batch
+# Navigate to FedAvg directory
+cd FedAvg
+# Run the Windows batch script
+start_fedavg_alt.bat
+```
+
+**Linux/Mac:**
+```bash
+# Navigate to FedAvg directory
+cd FedAvg
+# Make script executable
+chmod +x start_fedavg.sh
+# Run the Linux/Mac script
+./start_fedavg.sh
+```
+
+The scripts provide interactive menus with these options:
+1. Run IID experiment
+2. Run Shard-based Non-IID experiment
+3. Run Shard-based Non-IID experiment with WandB logging
+4. Run Dirichlet Non-IID experiment (alpha=0.1)
+5. Run Dirichlet Non-IID with WandB logging
+6. Test implementation
+7. Open command prompt/shell
+
+### Manual Execution
 
 Navigate to the FedAvg directory and run:
 
@@ -162,12 +239,62 @@ MAJOR_PROJECT_1/
 │   ├── utils.py             # Helper functions
 │   ├── environment.yml      # Conda environment specification
 │   ├── sweep.yaml           # WandB hyperparameter sweep config
+│   ├── start_fedavg_alt.bat # Windows startup script
+│   ├── start_fedavg.sh      # Linux/Mac startup script
 │   └── pytest.ini          # Testing configuration
 ├── datasets/                 # Dataset storage (auto-downloaded)
 └── README.md                # This file
 ```
 
-## 🧪 Testing
+## 🐧 Linux Distribution Notes
+
+### Tested Linux Distributions
+- **Ubuntu** 18.04, 20.04, 22.04
+- **Debian** 10, 11
+- **CentOS** 7, 8
+- **Red Hat Enterprise Linux (RHEL)** 7, 8
+- **Fedora** 35+
+
+### GPU Support on Linux
+For CUDA support on Linux:
+
+**Ubuntu/Debian:**
+```bash
+# Install NVIDIA drivers
+sudo apt install nvidia-driver-470
+# Install CUDA toolkit
+sudo apt install nvidia-cuda-toolkit
+```
+
+**CentOS/RHEL/Fedora:**
+```bash
+# Enable EPEL repository (CentOS/RHEL)
+sudo yum install epel-release
+# Install NVIDIA drivers
+sudo yum install nvidia-driver cuda-toolkit
+```
+
+### Common Linux Issues and Solutions
+
+**Permission Issues:**
+```bash
+# Make scripts executable
+chmod +x FedAvg/start_fedavg.sh
+
+# If conda command not found
+echo 'export PATH="$HOME/miniconda3/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+**Missing Dependencies:**
+```bash
+# Ubuntu/Debian
+sudo apt install build-essential python3-dev
+
+# CentOS/RHEL
+sudo yum groupinstall "Development Tools"
+sudo yum install python3-devel
+```
 
 Run the test suite to validate the implementation:
 
